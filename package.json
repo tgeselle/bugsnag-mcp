@@ -1,15 +1,26 @@
 {
-  "name": "bugsnag-mcp",
-  "version": "0.1.0",
-  "description": "A Bugsnag MCP",
-  "private": true,
+  "name": "bugsnag-mcp-server",
+  "version": "1.0.0",
+  "description": "A Bugsnag MCP server for interacting with Bugsnag API",
   "type": "module",
   "bin": {
-    "bugsnag-mcp": "./build/index.js"
+    "bugsnag-mcp-server": "./build/index.js"
   },
   "files": [
     "build"
   ],
+  "keywords": [
+    "bugsnag",
+    "mcp",
+    "model-context-protocol",
+    "llm",
+    "cursor",
+    "claude"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/bugsnag-mcp"
+  },
   "scripts": {
     "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
     "prepare": "npm run build",

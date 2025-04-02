@@ -19,6 +19,16 @@ A Model Context Protocol (MCP) server for interacting with Bugsnag. This server 
 
 ## Installation
 
+### Option 1: Install from npm (Recommended)
+
+```bash
+npm install -g bugsnag-mcp-server
+```
+
+This will install the Bugsnag MCP server globally on your system, making it available for use with LLM tools like Cursor and Claude Desktop.
+
+### Option 2: Install from source
+
 1. Clone this repository:
    ```bash
    git clone https://github.com/yourusername/bugsnag-mcp.git
@@ -73,8 +83,8 @@ To use this MCP server with Cursor:
    {
      "mcpServers": {
        "bugsnag": {
-         "command": "node",
-         "args": ["/path/to/bugsnag-mcp/build/index.js"],
+         "command": "npx",
+         "args": ["-y", "bugsnag-mcp-server"],
          "env": {
            "BUGSNAG_API_KEY": "your-bugsnag-api-key"
          },
@@ -85,7 +95,7 @@ To use this MCP server with Cursor:
    }
    ```
 
-3. Replace `/path/to/bugsnag-mcp` with the actual path to your installation
+3. Replace `your-bugsnag-api-key` with your Bugsnag API key
 4. Replace `your-bugsnag-api-key` with your Bugsnag API key
 
 ### For Claude Desktop
@@ -102,8 +112,8 @@ To use this MCP server with Claude Desktop:
    {
      "mcpServers": {
        "bugsnag": {
-         "command": "node",
-         "args": ["/path/to/bugsnag-mcp/build/index.js"],
+         "command": "npx",
+         "args": ["-y", "bugsnag-mcp-server"],
          "env": {
            "BUGSNAG_API_KEY": "your-bugsnag-api-key"
          },

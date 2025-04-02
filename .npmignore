@@ -1,0 +1,19 @@
+# Source files (since we're publishing the compiled output)
+src/
+tsconfig.json
+
+# Development files
+.git/
+.github/
+.gitignore
+test-api-key.js
+
+# Documentation files that aren't needed in the package
+bugsnag-mcp-implementation.md
+bugsnag-mcp-remove-issue-tools.md
+bugsnag-mcp-revamp-plan.md
+bugsnag-mcp-summary.md
+bugsnag-mcp-npm-publishing-plan.md
+
+# Memory bank
+memory-bank/
