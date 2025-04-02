@@ -11,6 +11,7 @@ import {
   handleViewEvent,
   handleViewStacktrace,
   handleViewExceptionChain,
+  handleViewTabs,
 } from './events.js';
 import { handleListIssues, handleViewIssue } from './issues.js';
 
@@ -28,6 +29,7 @@ export {
   handleListIssues,
   handleViewIssue,
   handleSearchIssues,
+  handleViewTabs,
 };
 
 // Tool definitions for registration
@@ -215,6 +217,28 @@ export const toolDefinitions = [
         },
       },
       required: ['project_id'],
+    },
+  },
+  {
+    name: 'view_tabs',
+    description: 'View all event data tabs including app, device, user, request, breadcrumbs, metadata, and stacktrace',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        project_id: {
+          type: 'string',
+          description: 'Bugsnag project ID',
+        },
+        event_id: {
+          type: 'string',
+          description: 'Bugsnag event ID',
+        },
+        include_code: {
+          type: 'boolean',
+          description: 'Include source code context in stacktrace if available',
+        },
+      },
+      required: ['project_id', 'event_id'],
     },
   },
 ];

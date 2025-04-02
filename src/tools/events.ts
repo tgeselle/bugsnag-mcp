@@ -139,3 +139,58 @@ export const handleViewExceptionChain: ToolHandler = async args => {
     ],
   };
 };
+
+/**
+ * Handle the view_tabs tool
+ */
+export const handleViewTabs: ToolHandler = async args => {
+  const projectId = args.project_id;
+  const eventId = args.event_id;
+  const includeCode = args.include_code !== false; // Default to true
+
+  const client = initApiClient();
+  const response = await client.get(`/projects/${projectId}/events/${eventId}`);
+  const event = response.data;
+
+  // Organize the data into logical sections/tabs
+  const formattedEvent: any = {
+    // Basic event info
+    id: event.id,
+    error_id: event.error_id,
+    received_at: event.received_at,
+    unhandled: event.unhandled,
+    severity: event.severity,
+    context: event.context,
+    
+    // Tab data
+    app: event.app || null,
+    device: event.device || null,
+    user: event.user || null,
+    request: event.request || null,
+    breadcrumbs: event.breadcrumbs || [],
+    metaData: event.metaData || {},
+    
+    // Stacktrace and exceptions
+    exceptions: event.exceptions || [],
+    threads: event.threads || [],
+  };
+
+  // Format the stacktrace if available
+  let stacktraceText = '';
+  if (event.exceptions && event.exceptions.length > 0) {
+    const primaryException = event.exceptions[0];
+    stacktraceText = formatStacktrace(primaryException.stacktrace, includeCode);
+    
+    // Add formatted stacktrace as a separate field
+    formattedEvent.formatted_stacktrace = `# Stacktrace for ${primaryException.errorClass}: ${primaryException.message}\n\n${stacktraceText}`;
+  }
+
+  return {
+    content: [
+      {
+        type: 'text',
+        text: JSON.stringify(formattedEvent, null, 2),
+      },
+    ],
+  };
+};

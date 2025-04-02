@@ -29,7 +29,7 @@ export class BugsnagServer {
     this.server = new Server(
       {
         name: 'bugsnag-mcp-server',
-        version: '1.0.0',
+        version: '1.1.0',
       },
       {
         capabilities: {
@@ -82,6 +82,8 @@ export class BugsnagServer {
             return await tools.handleViewStacktrace(request.params.arguments);
           case 'view_exception_chain':
             return await tools.handleViewExceptionChain(request.params.arguments);
+          case 'view_tabs':
+            return await tools.handleViewTabs(request.params.arguments);
           case 'search_issues':
             return await tools.handleSearchIssues(request.params.arguments);
           default:
