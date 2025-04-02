@@ -1,5 +1,4 @@
-// Set up environment variables for tests
-process.env.BUGSNAG_API_KEY = 'test-api-key';
+// Set up test environment
 
 // Import the jest global
 import { jest } from '@jest/globals';

@@ -254,6 +254,27 @@ If you're interested in contributing or modifying the code:
    npm run build
    ```
 
+4. Run tests:
+   ```bash
+   npm test
+   ```
+
+5. Run tests with coverage:
+   ```bash
+   npm run test:coverage
+   ```
+
+### Continuous Integration
+
+This project uses GitHub Actions for continuous integration. The workflow automatically:
+
+- Runs on push to the main branch and on pull requests
+- Tests against multiple Node.js versions (18.x and 20.x)
+- Runs the test suite
+- Generates and uploads test coverage reports
+
+You can view the workflow configuration in `.github/workflows/test.yml`.
+
 ## License
 
 MIT
