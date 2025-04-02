@@ -2,12 +2,12 @@
  * Integration tests for event tools
  */
 
-import { 
-  handleListErrorEvents, 
-  handleViewLatestEvent, 
+import {
+  handleListErrorEvents,
+  handleViewLatestEvent,
   handleViewEvent,
   handleViewStacktrace,
-  handleViewExceptionChain
+  handleViewExceptionChain,
 } from '../../../src/tools/events';
 import { eventsFixture, eventDetailFixture } from '../../fixtures/events';
 import { jest, describe, it, expect } from '@jest/globals';

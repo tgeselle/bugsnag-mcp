@@ -15,12 +15,12 @@
  * - Issue Management: Resolve issues, add comments, assign to team members, and search for specific issues
  */
 
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { BugsnagServer } from "./server.js";
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { BugsnagServer } from './server.js';
 
 // Create and run the server
 const server = new BugsnagServer();
-server.connect(new StdioServerTransport()).catch((error) => {
-  console.error("Server error:", error);
+server.connect(new StdioServerTransport()).catch(error => {
+  console.error('Server error:', error);
   process.exit(1);
 });

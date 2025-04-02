@@ -2,7 +2,7 @@
  * Bugsnag MCP Server
  */
 
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import {
   CallToolRequestSchema,
   ErrorCode,
@@ -10,13 +10,13 @@ import {
   ListToolsRequestSchema,
   McpError,
   ReadResourceRequestSchema,
-} from "@modelcontextprotocol/sdk/types.js";
-import axios from "axios";
+} from '@modelcontextprotocol/sdk/types.js';
+import axios from 'axios';
 
-import { initApiClient } from "./api/client.js";
-import { toolDefinitions } from "./tools/index.js";
-import * as tools from "./tools/index.js";
-import { handleResourceRequest, listResources } from "./resources/index.js";
+import { initApiClient } from './api/client.js';
+import { toolDefinitions } from './tools/index.js';
+import * as tools from './tools/index.js';
+import { handleResourceRequest, listResources } from './resources/index.js';
 
 /**
  * Main Bugsnag MCP Server class
@@ -28,8 +28,8 @@ export class BugsnagServer {
     // Initialize server
     this.server = new Server(
       {
-        name: "bugsnag-mcp-server",
-        version: "1.0.0",
+        name: 'bugsnag-mcp-server',
+        version: '1.0.0',
       },
       {
         capabilities: {
@@ -42,9 +42,9 @@ export class BugsnagServer {
     // Set up handlers
     this.setupToolHandlers();
     this.setupResourceHandlers();
-    
+
     // Error handling
-    this.server.onerror = (error) => console.error('[MCP Error]', error);
+    this.server.onerror = error => console.error('[MCP Error]', error);
     process.on('SIGINT', async () => {
       await this.server.close();
       process.exit(0);
@@ -61,44 +61,39 @@ export class BugsnagServer {
     }));
 
     // Handle tool calls
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       try {
         switch (request.params.name) {
-          case "list_organizations":
+          case 'list_organizations':
             return await tools.handleListOrganizations(request.params.arguments);
-          case "list_projects":
+          case 'list_projects':
             return await tools.handleListProjects(request.params.arguments);
-          case "list_errors":
+          case 'list_errors':
             return await tools.handleListErrors(request.params.arguments);
-          case "view_error":
+          case 'view_error':
             return await tools.handleViewError(request.params.arguments);
-          case "list_error_events":
+          case 'list_error_events':
             return await tools.handleListErrorEvents(request.params.arguments);
-          case "view_latest_event":
+          case 'view_latest_event':
             return await tools.handleViewLatestEvent(request.params.arguments);
-          case "view_event":
+          case 'view_event':
             return await tools.handleViewEvent(request.params.arguments);
-          case "view_stacktrace":
+          case 'view_stacktrace':
             return await tools.handleViewStacktrace(request.params.arguments);
-          case "view_exception_chain":
+          case 'view_exception_chain':
             return await tools.handleViewExceptionChain(request.params.arguments);
-          case "search_issues":
+          case 'search_issues':
             return await tools.handleSearchIssues(request.params.arguments);
           default:
-            throw new McpError(
-              ErrorCode.MethodNotFound,
-              `Unknown tool: ${request.params.name}`
-            );
+            throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${request.params.name}`);
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
           return {
             content: [
               {
-                type: "text",
-                text: `Bugsnag API error: ${
-                  error.response?.data?.message || error.message
-                }`,
+                type: 'text',
+                text: `Bugsnag API error: ${error.response?.data?.message || error.message}`,
               },
             ],
             isError: true,
@@ -120,21 +115,21 @@ export class BugsnagServer {
         const resources = await listResources(client);
         return { resources };
       } catch (error) {
-        console.error("Error listing resources:", error);
+        console.error('Error listing resources:', error);
         return { resources: [] };
       }
     });
 
     // Read resource content
-    this.server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+    this.server.setRequestHandler(ReadResourceRequestSchema, async request => {
       try {
         const uri = request.params.uri;
         const client = initApiClient();
-        
+
         const content = await handleResourceRequest(uri, client);
-        
+
         return {
-          contents: [content]
+          contents: [content],
         };
       } catch (error) {
         if (axios.isAxiosError(error)) {

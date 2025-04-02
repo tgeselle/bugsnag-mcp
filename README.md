@@ -264,16 +264,29 @@ If you're interested in contributing or modifying the code:
    npm run test:coverage
    ```
 
+6. Format code:
+  ```bash
+  npm run format
+  ```
+
+7. Check code formatting:
+  ```bash
+  npm run format:check
+  ```
+
 ### Continuous Integration
 
-This project uses GitHub Actions for continuous integration. The workflow automatically:
+This project uses GitHub Actions for continuous integration. The workflows automatically:
 
 - Runs on push to the main branch and on pull requests
 - Tests against multiple Node.js versions (18.x and 20.x)
 - Runs the test suite
 - Generates and uploads test coverage reports
+- Checks code formatting with Prettier
 
-You can view the workflow configuration in `.github/workflows/test.yml`.
+You can view the workflow configurations in:
+- `.github/workflows/test.yml` - For running tests
+- `.github/workflows/prettier.yml` - For checking code formatting
 
 ## License
 

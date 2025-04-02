@@ -2,7 +2,7 @@
  * Common type definitions for the Bugsnag MCP server
  */
 
-import { AxiosInstance } from "axios";
+import { AxiosInstance } from 'axios';
 
 /**
  * Tool handler function type
