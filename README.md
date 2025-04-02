@@ -1,51 +1,72 @@
 # Bugsnag MCP Server
 
-A Model Context Protocol (MCP) server for interacting with Bugsnag. This server allows LLM tools like Cursor to investigate and resolve issues in Bugsnag.
+A Model Context Protocol (MCP) server for interacting with Bugsnag. This server allows LLM tools like Cursor and Claude to investigate and resolve issues in Bugsnag.
 
-## Features
+## ✨ Features
 
-- **Organization & Project Management**: List organizations and projects to easily navigate the Bugsnag hierarchy
-- **Error & Event Management**: List errors and events with filtering options to find specific issues
-- **Detailed Stacktrace Viewing**: Format stacktraces with source code context, line numbers, and visual highlighting of error lines
-- **Exception Chain Visualization**: View the full chain of exceptions to understand the root cause of issues
-- **Project vs. Library Code Distinction**: Clearly distinguish between project code and third-party library code
-- **Issue Management**: Resolve issues, add comments, assign to team members, and search for specific issues
+### Error Monitoring & Analysis
+- **Organization & Project Navigation**: Easily browse your Bugsnag hierarchy
+- **Error & Event Filtering**: Find specific issues with powerful filtering options
+- **Detailed Stacktrace Viewing**: See formatted stacktraces with source code context and highlighted error lines
+- **Exception Chain Visualization**: Understand the root cause by viewing the full exception chain
 
-## Prerequisites
+### Code Intelligence
+- **Project vs. Library Code Distinction**: Clearly identify your code vs third-party libraries
+- **Source Code Context**: View relevant code snippets around error locations
+- **Error Patterns**: Identify recurring patterns across multiple errors
 
-- Node.js (v16 or later)
-- npm or yarn
-- A Bugsnag account with API access
+### Issue Management
+- **Search Capabilities**: Find issues by error class, message, or app version
+- **Error Details**: Get comprehensive information about each error
+- **Event History**: View all occurrences of a specific error
 
-## Installation
+## 🚀 Quick Setup
 
-### Option 1: Install from npm (Recommended)
+Setting up the Bugsnag MCP server is simple and doesn't require any installation or downloading source code.
 
-```bash
-npm install -g bugsnag-mcp-server
-```
+### For Cursor
 
-This will install the Bugsnag MCP server globally on your system, making it available for use with LLM tools like Cursor and Claude Desktop.
-
-### Option 2: Install from source
-
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/yourusername/bugsnag-mcp.git
-   cd bugsnag-mcp
+1. Add the Bugsnag MCP server configuration:
+   ```json
+   {
+     "mcpServers": {
+       "bugsnag": {
+         "command": "npx",
+         "args": ["-y", "bugsnag-mcp-server"],
+         "env": {
+           "BUGSNAG_API_KEY": "your-bugsnag-api-key"
+         },
+         "disabled": false,
+         "alwaysAllow": []
+       }
+     }
+   }
    ```
 
-2. Install dependencies:
-   ```bash
-   npm install
+2. Replace `your-bugsnag-api-key` with your Bugsnag API key
+
+### For Claude Desktop
+
+1. Add the Bugsnag MCP server configuration:
+   ```json
+   {
+     "mcpServers": {
+       "bugsnag": {
+         "command": "npx",
+         "args": ["-y", "bugsnag-mcp-server"],
+         "env": {
+           "BUGSNAG_API_KEY": "your-bugsnag-api-key"
+         },
+         "disabled": false,
+         "alwaysAllow": []
+       }
+     }
+   }
    ```
 
-3. Build the project:
-   ```bash
-   npm run build
-   ```
+2. Replace `your-bugsnag-api-key` with your Bugsnag API key
 
-## Obtaining a Bugsnag API Key
+## 🔑 Obtaining a Bugsnag API Key
 
 To use this MCP server, you'll need a Bugsnag API key:
 
@@ -57,78 +78,11 @@ To use this MCP server, you'll need a Bugsnag API key:
    - Read and write comments
 4. Copy the generated token for use with the MCP server
 
-## Testing Your API Key
+## 📋 Usage Examples
 
-Before configuring the MCP server, you can test if your Bugsnag API key is valid using the included test script:
+Once configured, you can use the Bugsnag MCP server with your LLM tool. Here are some example prompts:
 
-```bash
-node test-api-key.js YOUR_API_KEY
-```
-
-If your API key is valid, the script will display a list of your Bugsnag projects with their IDs, which you'll need when using the MCP tools.
-
-## Configuration
-
-### For Cursor
-
-To use this MCP server with Cursor:
-
-1. Edit the MCP settings file at:
-   - macOS: `~/Library/Application Support/Cursor/User/globalStorage/rooveterinaryinc.roo-cline/settings/mcp_settings.json`
-   - Windows: `%APPDATA%\Cursor\User\globalStorage\rooveterinaryinc.roo-cline\settings\mcp_settings.json`
-   - Linux: `~/.config/Cursor/User/globalStorage/rooveterinaryinc.roo-cline/settings/mcp_settings.json`
-
-2. Add the Bugsnag MCP server configuration:
-   ```json
-   {
-     "mcpServers": {
-       "bugsnag": {
-         "command": "npx",
-         "args": ["-y", "bugsnag-mcp-server"],
-         "env": {
-           "BUGSNAG_API_KEY": "your-bugsnag-api-key"
-         },
-         "disabled": false,
-         "alwaysAllow": []
-       }
-     }
-   }
-   ```
-
-3. Replace `your-bugsnag-api-key` with your Bugsnag API key
-4. Replace `your-bugsnag-api-key` with your Bugsnag API key
-
-### For Claude Desktop
-
-To use this MCP server with Claude Desktop:
-
-1. Edit the Claude Desktop config file at:
-   - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-   - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-   - Linux: `~/.config/Claude/claude_desktop_config.json`
-
-2. Add the Bugsnag MCP server configuration:
-   ```json
-   {
-     "mcpServers": {
-       "bugsnag": {
-         "command": "npx",
-         "args": ["-y", "bugsnag-mcp-server"],
-         "env": {
-           "BUGSNAG_API_KEY": "your-bugsnag-api-key"
-         },
-         "disabled": false,
-         "alwaysAllow": []
-       }
-     }
-   }
-   ```
-
-## Usage Examples
-
-Once the MCP server is configured, you can use it with Cursor or Claude Desktop. Here are some example prompts:
-
-### Organization & Project Management
+### Exploring Your Bugsnag Account
 
 ```
 List all my Bugsnag organizations
@@ -138,7 +92,7 @@ List all my Bugsnag organizations
 Show me all projects in organization "org_12345"
 ```
 
-### Error & Event Management
+### Finding and Analyzing Errors
 
 ```
 List the open errors in my Bugsnag project "project_12345"
@@ -149,16 +103,6 @@ Show me the details for Bugsnag error ID "error_12345"
 ```
 
 ```
-List all events for error "error_12345" in project "project_12345"
-```
-
-```
-Show me the latest event for error "error_12345"
-```
-
-### Stacktrace Analysis
-
-```
 Show me the detailed stacktrace for event "event_12345" in project "project_12345"
 ```
 
@@ -166,25 +110,17 @@ Show me the detailed stacktrace for event "event_12345" in project "project_1234
 View the exception chain for event "event_12345" in project "project_12345"
 ```
 
-### Issue Management
-
-```
-Resolve the Bugsnag issue with ID "error_12345" with the comment "Fixed in latest release"
-```
-
-```
-Add a comment to Bugsnag issue "error_12345" saying "This is related to the database connection timeout"
-```
-
-```
-Assign Bugsnag issue "error_12345" to user "user_67890"
-```
+### Searching for Specific Issues
 
 ```
 Search for Bugsnag issues in project "project_12345" related to "NullPointerException"
 ```
 
-## Available Tools
+```
+List all events for error "error_12345" in project "project_12345"
+```
+
+## 📚 Available Tools
 
 The Bugsnag MCP server provides the following tools:
 
@@ -268,30 +204,6 @@ Parameters:
 
 ### Issue Management
 
-#### resolve_issue
-
-Marks an issue as resolved.
-
-Parameters:
-- `issue_id` (required): Bugsnag issue ID
-- `resolution_comment`: Optional comment explaining the resolution
-
-#### comment_on_issue
-
-Adds a comment to an issue.
-
-Parameters:
-- `issue_id` (required): Bugsnag issue ID
-- `comment_text` (required): Comment text
-
-#### assign_issue
-
-Assigns an issue to a team member.
-
-Parameters:
-- `issue_id` (required): Bugsnag issue ID
-- `user_id` (required): Bugsnag user ID to assign the issue to
-
 #### search_issues
 
 Searches for issues using various criteria.
@@ -302,23 +214,45 @@ Parameters:
 - `error_class`: Filter by error class
 - `app_version`: Filter by app version
 
-## Development
+## 🛠️ Advanced Usage
 
-### Running in Development Mode
+### Testing Your API Key
 
-To run the server in development mode:
-
-```bash
-npm run watch
-```
-
-### Testing with the MCP Inspector
-
-You can test the server using the MCP Inspector:
+You can test if your Bugsnag API key is valid using:
 
 ```bash
-npm run inspector
+npx bugsnag-mcp-server test-api-key your-bugsnag-api-key
 ```
+
+If your API key is valid, this will display a list of your Bugsnag projects with their IDs.
+
+### Installation Options
+
+While using `npx` is recommended for most users, you can also install the package globally if you prefer:
+
+```bash
+npm install -g bugsnag-mcp-server
+```
+
+### For Developers
+
+If you're interested in contributing or modifying the code:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/bugsnag-mcp.git
+   cd bugsnag-mcp
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Build the project:
+   ```bash
+   npm run build
+   ```
 
 ## License
 
