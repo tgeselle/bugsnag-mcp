@@ -34,9 +34,19 @@ jobs:
         
     - name: Run tests with coverage
       run: npm run test:coverage
+    
+    - name: Check coverage directory
+      run: |
+        if [ ! -d "coverage" ]; then
+          echo "Coverage directory does not exist. Creating empty directory."
+          mkdir -p coverage
+        else
+          echo "Coverage directory exists."
+          ls -la coverage
+        fi
         
     - name: Upload coverage report
       uses: actions/upload-artifact@v3
       with:
         name: coverage-report
-        path: coverage/
+        path: coverage
