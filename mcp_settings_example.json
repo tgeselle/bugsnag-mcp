@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "bugsnag": {
+      "command": "node",
+      "args": ["/path/to/bugsnag-mcp/build/index.js"],
+      "env": {
+        "BUGSNAG_API_KEY": "your-bugsnag-api-key"
+      },
+      "disabled": false,
+      "alwaysAllow": []
+    }
+  }
+}
