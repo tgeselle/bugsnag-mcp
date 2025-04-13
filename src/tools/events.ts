@@ -161,7 +161,7 @@ export const handleViewTabs: ToolHandler = async args => {
     unhandled: event.unhandled,
     severity: event.severity,
     context: event.context,
-    
+
     // Tab data
     app: event.app || null,
     device: event.device || null,
@@ -169,7 +169,7 @@ export const handleViewTabs: ToolHandler = async args => {
     request: event.request || null,
     breadcrumbs: event.breadcrumbs || [],
     metaData: event.metaData || {},
-    
+
     // Stacktrace and exceptions
     exceptions: event.exceptions || [],
     threads: event.threads || [],
@@ -180,7 +180,7 @@ export const handleViewTabs: ToolHandler = async args => {
   if (event.exceptions && event.exceptions.length > 0) {
     const primaryException = event.exceptions[0];
     stacktraceText = formatStacktrace(primaryException.stacktrace, includeCode);
-    
+
     // Add formatted stacktrace as a separate field
     formattedEvent.formatted_stacktrace = `# Stacktrace for ${primaryException.errorClass}: ${primaryException.message}\n\n${stacktraceText}`;
   }

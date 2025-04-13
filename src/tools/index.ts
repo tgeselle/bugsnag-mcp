@@ -221,7 +221,8 @@ export const toolDefinitions = [
   },
   {
     name: 'view_tabs',
-    description: 'View all event data tabs including app, device, user, request, breadcrumbs, metadata, and stacktrace',
+    description:
+      'View all event data tabs including app, device, user, request, breadcrumbs, metadata, and stacktrace',
     inputSchema: {
       type: 'object',
       properties: {
