@@ -1,4 +1,5 @@
 # Bugsnag MCP Server
+[![Trust Score](https://archestra.ai/mcp-catalog/api/badge/quality/tgeselle/bugsnag-mcp)](https://archestra.ai/mcp-catalog/tgeselle__bugsnag-mcp)
 
 A Model Context Protocol (MCP) server for interacting with Bugsnag. This server allows LLM tools like Cursor and Claude to investigate and resolve issues in Bugsnag.
 
