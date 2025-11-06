@@ -131,6 +131,10 @@ export const toolDefinitions = [
           type: 'string',
           description: 'Bugsnag error ID',
         },
+        include_full_details: {
+          type: 'boolean',
+          description: 'Include all event details (may exceed token limits). Default: false for efficiency.',
+        },
       },
       required: ['error_id'],
     },
@@ -170,6 +174,10 @@ export const toolDefinitions = [
         include_code: {
           type: 'boolean',
           description: 'Include source code context if available',
+        },
+        max_frames: {
+          type: 'number',
+          description: 'Maximum number of stacktrace frames to return (default: 20 for token efficiency)',
         },
       },
       required: ['project_id', 'event_id'],
@@ -237,6 +245,10 @@ export const toolDefinitions = [
         include_code: {
           type: 'boolean',
           description: 'Include source code context in stacktrace if available',
+        },
+        max_frames: {
+          type: 'number',
+          description: 'Maximum number of stacktrace frames to return (default: 20 for token efficiency)',
         },
       },
       required: ['project_id', 'event_id'],
