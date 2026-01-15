@@ -3,6 +3,7 @@
  */
 
 import { initApiClient } from '../api/client.js';
+import { fetchAllPages } from '../api/pagination.js';
 import { ToolHandler } from '../types/index.js';
 
 /**
@@ -12,13 +13,16 @@ export const handleListProjects: ToolHandler = async args => {
   const organizationId = args.organization_id;
 
   const client = initApiClient();
-  const response = await client.get(`/organizations/${organizationId}/projects`);
+  const projects = await fetchAllPages(
+    client,
+    `/organizations/${organizationId}/projects`,
+  );
 
   return {
     content: [
       {
         type: 'text',
-        text: JSON.stringify(response.data, null, 2),
+        text: JSON.stringify(projects, null, 2),
       },
     ],
   };
