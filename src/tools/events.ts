@@ -8,6 +8,31 @@ import { formatStacktrace } from '../utils/stacktrace.js';
 import { formatExceptionChain } from '../utils/exceptions.js';
 
 /**
+ * Lightweight interface for Bugsnag exception objects from the API
+ */
+interface BugsnagException {
+  errorClass: string;
+  message: string;
+  type?: string;
+  stacktrace?: Array<Record<string, unknown>>;
+}
+
+/**
+ * Limit stacktrace frames and return metadata about truncation.
+ */
+function limitFrames(
+  stacktrace: Array<Record<string, unknown>>,
+  maxFrames: number,
+): { limited: Array<Record<string, unknown>>; total: number; truncated: boolean } {
+  const total = stacktrace.length;
+  return {
+    limited: stacktrace.slice(0, maxFrames),
+    total,
+    truncated: total > maxFrames,
+  };
+}
+
+/**
  * Handle the list_error_events tool
  */
 export const handleListErrorEvents: ToolHandler = async args => {
@@ -80,7 +105,7 @@ export const handleViewLatestEvent: ToolHandler = async args => {
     user: event.user || null,
 
     // Exception summary (without full stacktraces)
-    exceptions: event.exceptions?.map((exc: any) => ({
+    exceptions: event.exceptions?.map((exc: BugsnagException) => ({
       errorClass: exc.errorClass,
       message: exc.message,
       type: exc.type,
@@ -128,7 +153,7 @@ export const handleViewStacktrace: ToolHandler = async args => {
   const projectId = args.project_id;
   const eventId = args.event_id;
   const includeCode = args.include_code !== false; // Default to true
-  const maxFrames = args.max_frames || 20; // Default to 20 frames for token efficiency
+  const maxFrames = args.max_frames ?? 20; // Default to 20 frames for token efficiency
 
   const client = initApiClient();
   const response = await client.get(`/projects/${projectId}/events/${eventId}`);
@@ -146,20 +171,15 @@ export const handleViewStacktrace: ToolHandler = async args => {
   }
 
   // Format the stacktrace of the primary exception
-  const primaryException = event.exceptions[0];
-  const stacktrace = primaryException.stacktrace || [];
+  const primaryException: BugsnagException = event.exceptions[0];
+  const { limited, total, truncated } = limitFrames(primaryException.stacktrace || [], maxFrames);
 
-  // Limit the number of frames to avoid token limits
-  const limitedStacktrace = stacktrace.slice(0, maxFrames);
-  const totalFrames = stacktrace.length;
-  const truncated = totalFrames > maxFrames;
-
-  const formattedStacktrace = formatStacktrace(limitedStacktrace, includeCode);
+  const formattedStacktrace = formatStacktrace(limited, includeCode);
 
   let output = `# Stacktrace for ${primaryException.errorClass}: ${primaryException.message}\n\n`;
 
   if (truncated) {
-    output += `⚠️  Showing ${maxFrames} of ${totalFrames} frames (use max_frames parameter to adjust)\n\n`;
+    output += `⚠️  Showing ${maxFrames} of ${total} frames (use max_frames parameter to adjust)\n\n`;
   }
 
   output += formattedStacktrace;
@@ -215,7 +235,8 @@ export const handleViewTabs: ToolHandler = async args => {
   const projectId = args.project_id;
   const eventId = args.event_id;
   const includeCode = args.include_code !== false; // Default to true
-  const maxFrames = args.max_frames || 20; // Default to 20 frames for token efficiency
+  const maxFrames = args.max_frames ?? 20; // Default to 20 frames for token efficiency
+  const maxBreadcrumbs = args.max_breadcrumbs ?? 10; // Default to last 10 breadcrumbs for token efficiency
 
   const client = initApiClient();
   const response = await client.get(`/projects/${projectId}/events/${eventId}`);
@@ -237,14 +258,14 @@ export const handleViewTabs: ToolHandler = async args => {
     user: event.user || null,
     request: event.request || null,
 
-    // Limit breadcrumbs to last 10 for token efficiency
-    breadcrumbs: (event.breadcrumbs || []).slice(-10),
+    // Limit breadcrumbs for token efficiency
+    breadcrumbs: (event.breadcrumbs || []).slice(-maxBreadcrumbs),
     breadcrumbs_total: event.breadcrumbs?.length || 0,
 
     metaData: event.metaData || {},
 
     // Exception summary (stacktraces limited separately)
-    exceptions: (event.exceptions || []).map((exc: any, index: number) => ({
+    exceptions: (event.exceptions || []).map((exc: BugsnagException, index: number) => ({
       index: index,
       errorClass: exc.errorClass,
       message: exc.message,
@@ -257,17 +278,15 @@ export const handleViewTabs: ToolHandler = async args => {
 
   // Format the stacktrace if available (limited frames)
   if (event.exceptions && event.exceptions.length > 0) {
-    const primaryException = event.exceptions[0];
-    const stacktrace = primaryException.stacktrace || [];
-    const limitedStacktrace = stacktrace.slice(0, maxFrames);
-    const truncated = stacktrace.length > maxFrames;
+    const primaryException: BugsnagException = event.exceptions[0];
+    const { limited, total, truncated } = limitFrames(primaryException.stacktrace || [], maxFrames);
 
-    const stacktraceText = formatStacktrace(limitedStacktrace, includeCode);
+    const stacktraceText = formatStacktrace(limited, includeCode);
 
     let output = `# Stacktrace for ${primaryException.errorClass}: ${primaryException.message}\n\n`;
 
     if (truncated) {
-      output += `⚠️  Showing ${maxFrames} of ${stacktrace.length} frames (use max_frames parameter to adjust)\n\n`;
+      output += `⚠️  Showing ${maxFrames} of ${total} frames (use max_frames parameter to adjust)\n\n`;
     }
 
     output += stacktraceText;

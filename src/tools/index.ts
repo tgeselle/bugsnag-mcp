@@ -250,6 +250,11 @@ export const toolDefinitions = [
           type: 'number',
           description: 'Maximum number of stacktrace frames to return (default: 20 for token efficiency)',
         },
+        max_breadcrumbs: {
+          type: 'number',
+          description:
+            'Maximum number of breadcrumbs to return, taken from the most recent (default: 10 for token efficiency)',
+        },
       },
       required: ['project_id', 'event_id'],
     },
