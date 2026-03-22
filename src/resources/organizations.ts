@@ -2,7 +2,7 @@
  * Organization resource handlers
  */
 
-import { AxiosInstance } from 'axios';
+import { fetchAllPages } from '../api/pagination.js';
 import { ResourceHandler } from '../types/index.js';
 
 /**
@@ -20,12 +20,12 @@ export const handleOrganizationResource: ResourceHandler = async (uri, client) =
   const orgResponse = await client.get(`/organizations/${orgId}`);
 
   // Get projects for this organization
-  const projectsResponse = await client.get(`/organizations/${orgId}/projects`);
+  const projects = await fetchAllPages(client, `/organizations/${orgId}/projects`);
 
   // Combine the data
   const data = {
     organization: orgResponse.data,
-    projects: projectsResponse.data,
+    projects,
   };
 
   return {
