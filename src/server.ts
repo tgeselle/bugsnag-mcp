@@ -89,13 +89,17 @@ export class BugsnagServer {
           default:
             throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${request.params.name}`);
         }
-      } catch (error) {
+      } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
+          const status = error.response?.status;
+          const statusText = error.response?.statusText;
+          const message = error.response?.data?.message || error.message;
+
           return {
             content: [
               {
                 type: 'text',
-                text: `Bugsnag API error: ${error.response?.data?.message || error.message}`,
+                text: `Bugsnag API error: Request failed with status code ${status || 'unknown'}${statusText ? ` (${statusText})` : ''}\n\nDetails: ${message}`,
               },
             ],
             isError: true,
@@ -133,7 +137,7 @@ export class BugsnagServer {
         return {
           contents: [content],
         };
-      } catch (error) {
+      } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
           throw new McpError(
             ErrorCode.InternalError,
