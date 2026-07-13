@@ -67,15 +67,20 @@ export const toolDefinitions = [
           type: 'string',
           description: 'Bugsnag project ID',
         },
-        status: {
-          type: 'string',
-          enum: ['open', 'fixed', 'ignored'],
-          description: 'Filter by error status',
-        },
         sort: {
           type: 'string',
-          enum: ['newest', 'oldest', 'priority'],
-          description: 'Sort order for errors',
+          enum: ['last_seen', 'first_seen', 'users', 'events', 'unsorted'],
+          description: 'Which field to sort errors by (Bugsnag API sort field, default last_seen)',
+        },
+        direction: {
+          type: 'string',
+          enum: ['asc', 'desc'],
+          description: 'Sort direction (default desc)',
+        },
+        filters: {
+          type: 'object',
+          description:
+            'Bugsnag API filters object, e.g. { "error.status": [{ "type": "eq", "value": "open" }] }. Keys are Bugsnag event/error fields (see the Bugsnag Filtering documentation); each value is an array of { type: "eq"|"ne"|"empty", value: string } objects.',
         },
         limit: {
           type: 'number',
