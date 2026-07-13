@@ -2,10 +2,17 @@
  * Integration tests for error tools
  */
 
-import { handleListErrors, handleViewError, handleSearchIssues } from '../../../src/tools/errors';
-import { errorsFixture, errorDetailFixture } from '../../fixtures/errors';
 import { jest, describe, it, expect } from '@jest/globals';
-import { initApiClient } from '../../../src/api/client';
+
+const mockGet = jest.fn();
+
+jest.unstable_mockModule('../src/api/client', () => ({
+  initApiClient: jest.fn(() => ({ get: mockGet })),
+}));
+
+const { handleListErrors, handleViewError, handleSearchIssues } = await import(
+  '../../../src/tools/errors.js'
+);
 
 describe('Error Tools', () => {
   it('should have error handler functions', () => {
