@@ -10,13 +10,14 @@ import { ToolHandler } from '../types/index.js';
  */
 export const handleListErrors: ToolHandler = async args => {
   const projectId = args.project_id;
-  const status = args.status || 'open';
-  const sort = args.sort || 'newest';
-  const limit = args.limit || 10;
+  const sort = args.sort || 'last_seen';
+  const direction = args.direction || 'desc';
+  const perPage = args.limit || 10;
+  const filters = args.filters;
 
   const client = initApiClient();
   const response = await client.get(`/projects/${projectId}/errors`, {
-    params: { status, sort, per_page: limit },
+    params: { sort, direction, per_page: perPage, ...(filters ? { filters } : {}) },
   });
 
   return {
